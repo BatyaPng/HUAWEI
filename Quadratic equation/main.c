@@ -14,17 +14,19 @@ int main() {
   int num_roots = 0;
 
   input(&a, &b, &c);
+  solve(a, b, c, &x_1, &x_2, &num_roots);
+  output(x_1, x_2, num_roots);
 }
 
 void input(double *a, double *b, double *c) {
   printf("Enter coefficients\n");
-  int input = scanf("%lf%lf%lf", a, b, c);
+  int input = scanf("%lf %lf %lf ", a, b, c);
 
   while (input != 3) {
-    printf("Wrong input. Repeat");
-    input = scanf("%lf%lf%lf", a, b, c);
     while (getchar() != '\n') {
     }
+    printf("Wrong input. Repeat\n");
+    input = scanf("%lf %lf %lf ", a, b, c);
   }
 }
 
@@ -34,7 +36,9 @@ void solve(double a, double b, double c, double *x_1, double *x_2,
     *x_1 = -c / b;
     *num_roots = 11;
     return;
-  } else {
+  } else if (a + b == 0)
+    return;
+  else {
     double D = b * b - 4 * a * c;
 
     if (D >= 0) {
@@ -64,7 +68,7 @@ void output(double x_1, double x_2, int num_roots) {
   case 11:
     printf("This is linear expression: x = %lf\n", x_1);
     return;
-  defualt:
+  default:
     printf("There is no roots\n");
     return;
   }
