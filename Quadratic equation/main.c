@@ -20,13 +20,11 @@ int main() {
 
 void input(double *a, double *b, double *c) {
   printf("Enter coefficients\n");
-  int input = scanf("%lf %lf %lf ", a, b, c);
+  int input = scanf("%lf%lf%lf", a, b, c);
 
-  while (input != 3) {
-    while (getchar() != '\n') {
-    }
+  while (getchar() != '\n' || input != 3) {
     printf("Wrong input. Repeat\n");
-    input = scanf("%lf %lf %lf ", a, b, c);
+    input = scanf("%lf%lf%lf", a, b, c);
   }
 }
 
