@@ -9,6 +9,10 @@ void solve(double a, double b, double c, double *x_1, double *x_2,
 
 void output(double x_1, double x_2, int num_roots);
 
+void clean_buff();
+
+int is_buff_empty();
+
 int main() {
   double a = 0, b = 0, c = 0, x_1 = 0, x_2 = 0;
   int num_roots = 0;
@@ -22,7 +26,8 @@ void input(double *a, double *b, double *c) {
   printf("Enter coefficients\n");
   int input = scanf("%lf%lf%lf", a, b, c);
 
-  while (getchar() != '\n' || input != 3) {
+  while (is_buff_empty() || input != 3) {
+    clean_buff();
     printf("Wrong input. Repeat\n");
     input = scanf("%lf%lf%lf", a, b, c);
   }
@@ -70,4 +75,15 @@ void output(double x_1, double x_2, int num_roots) {
     printf("There is no roots\n");
     return;
   }
+}
+
+void clean_buff() {
+  while (getchar() != '\n') {
+  }
+}
+
+int is_buff_empty() {
+  if (getchar() != '\n')
+    return 1;
+  return 0;
 }
