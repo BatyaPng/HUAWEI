@@ -11,7 +11,7 @@ int is_buff_empty() {
 }
 
 int double_comp (double a, double b) {
-    if (a > b)
+    if ((a - b) > EPS)
         return MORE;
     else if (fabs(a - b) < EPS)
         return EQUAL;
