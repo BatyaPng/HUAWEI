@@ -1,7 +1,7 @@
+#ifndef _IO_H_
+
 #include <stdlib.h>
 #include "helper functions.hpp"
-
-#ifndef _IO_H_
 
 #define _IO_H_
 

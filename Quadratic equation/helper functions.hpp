@@ -1,7 +1,8 @@
+#ifndef _HELPER_FUNCTIONS_H_
+
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
-
-#ifndef _HELPER_FUNCTIONS_H_
 
 #define _HELPER_FUNCTIONS_H_
 

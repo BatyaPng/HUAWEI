@@ -1,6 +1,6 @@
-#include "helper functions.hpp"
-
 #ifndef _SOLVE_H_
+
+#include "helper functions.hpp"
 
 #define _SOLVE_H_
 

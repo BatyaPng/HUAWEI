@@ -1,6 +1,8 @@
 #include "io.hpp"
 
 void input(double *a, double *b, double *c) {
+    assert(a != nullptr || b != nullptr || c != nullptr);
+
     printf("Enter coefficients\n");
     int input = scanf("%lf%lf%lf", a, b, c);
 

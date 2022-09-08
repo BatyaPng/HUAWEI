@@ -2,8 +2,8 @@
 #include "io.hpp"
 
 int main() {
-    double a = 0, b = 0, c = 0, x_1 = 0, x_2 = 0;
-    enum NUM_ROOTS num_roots = ZERO;
+    double a = NAN, b = NAN, c = NAN, x_1 = NAN, x_2 = NAN;
+    NUM_ROOTS num_roots = ZERO;
 
     input(&a, &b, &c);
     num_roots = solve(a, b, c, &x_1, &x_2);
