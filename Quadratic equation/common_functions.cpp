@@ -1,4 +1,4 @@
-#include "helper functions.hpp"
+#include "common_functions.hpp"
 
 void clean_buff() {
     while (getchar() != '\n') {}
