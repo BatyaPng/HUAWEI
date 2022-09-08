@@ -21,10 +21,10 @@ NUM_ROOTS quadratic_solve(const double a, const double b, const double c, double
         *x_2 = (-b - sqrt_D) / (2 * a);
         return TWO_SQR;
     } else if (double_comp(D, 0) == EQUAL) {
-        *x_1 = (-b + sqrt_D) / (2 * a);
+        *x_1 = -b / (2 * a);
         return ONE_SQR;
     }
-    
+
     printf("Runtime error\n");
     abort();
 }

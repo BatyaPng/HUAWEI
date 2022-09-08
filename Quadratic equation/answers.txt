@@ -1,0 +1,30 @@
+Two roots exist: x_1 = -12.0; x_2 = -0.0
+Two roots exist: x_1 = 22.215; x_2 = -1.215
+There is no roots
+There is no roots
+Two roots exist: x_1 = -51.742; x_2 = 21.742
+Two roots exist: x_1 = -114.109; x_2 = 51.109
+There is no roots
+Two roots exist: x_1 = -3.689; x_2 = 21.689
+There is no roots
+There is no roots
+There is no roots
+Two roots exist: x_1 = -2.954; x_2 = 18.954
+Two roots exist: x_1 = 84.166; x_2 = -12.166
+Two roots exist: x_1 = 16.479; x_2 = -88.479
+Two roots exist: x_1 = 20.0; x_2 = 0.0
+There is no roots
+There is no roots
+Two roots exist: x_1 = -18.0; x_2 = 15.0
+Two roots exist: x_1 = 24.868; x_2 = -12.868
+There is no roots
+Two roots exist: x_1 = -22.273; x_2 = 7.273
+There is no roots
+There is no roots
+There is no roots
+Two roots exist: x_1 = 0.0; x_2 = -28.0
+Two roots exist: x_1 = -11.713; x_2 = 43.713
+There is no roots
+Two roots exist: x_1 = -32.0; x_2 = 64.0
+Two roots exist: x_1 = -18.0; x_2 = 3.0
+Two roots exist: x_1 = -54.0; x_2 = -0.0

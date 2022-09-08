@@ -1,9 +1,8 @@
 #ifndef _IO_H_
+#define _IO_H_
 
 #include <stdlib.h>
 #include "common_functions.hpp"
-
-#define _IO_H_
 
 void input(double *a, double *b, double *c);
 

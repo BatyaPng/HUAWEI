@@ -1,0 +1,1 @@
+Two roots exist: x_1 = -0.333; x_2 = -0.000

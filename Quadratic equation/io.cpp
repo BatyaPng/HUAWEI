@@ -1,7 +1,7 @@
 #include "io.hpp"
 
 void input(double *a, double *b, double *c) {
-    assert(a != nullptr || b != nullptr || c != nullptr);
+    assert(a || b || c);
 
     printf("Enter coefficients\n");
     int input = scanf("%lf%lf%lf", a, b, c);
@@ -19,13 +19,13 @@ void output(const double x_1, const double x_2, const enum NUM_ROOTS num_roots) 
         printf("There is no roots\n");
         return;
     case ONE_LIN:
-        printf("This is linear equation: x = %lg\n", x_1);
+        printf("This is linear equation: x = %.3lf\n", x_1);
         return;
     case ONE_SQR:
-        printf("One root exists: x = %lg\n", x_1);
+        printf("One root exists: x = %.3lf\n", x_1);
         return;
     case TWO_SQR:
-        printf("Two roots exist: x_1 = %lg; x_2 = %lg\n", x_1, x_2);
+        printf("Two roots exist: x_1 = %.3lf; x_2 = %.3lf\n", x_1, x_2);
         return;
     case INF:
         printf("Infinite number of roots\n");
