@@ -6,6 +6,7 @@ NUM_ROOTS lin_solve(const double b, const double c, double *x_1) {
         return ONE_LIN;
     } else if (double_comp(b, 0) == EQUAL && double_comp(c, 0) == EQUAL)
         return INF;
+        
     return ZERO;
 }
 
@@ -37,5 +38,6 @@ NUM_ROOTS solve(const double a, const double b, const double c, double *x_1, dou
     if (double_comp(a, 0) == EQUAL) {
         return lin_solve(b, c, x_1);
     }
+
     return quadratic_solve(a, b, c, x_1, x_2);
 }

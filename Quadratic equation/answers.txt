@@ -28,3 +28,4 @@ There is no roots
 Two roots exist: x_1 = -32.0; x_2 = 64.0
 Two roots exist: x_1 = -18.0; x_2 = 3.0
 Two roots exist: x_1 = -54.0; x_2 = -0.0
+One root exists: x = -1.0

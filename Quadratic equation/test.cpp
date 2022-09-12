@@ -37,8 +37,8 @@ void test() {
 
         fclose(answer_t);
 
-        freopen ("/dev/tty", "a", stdout);
-
+        freopen("/dev/tty", "a", stdout);
+        
         int res = strcmp(ans_p, ans_t);
         if (res == 0)
             printf("Passed\n");

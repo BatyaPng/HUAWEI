@@ -9,7 +9,7 @@
 
 void clean_buff();
 
-int is_buff_empty();
+int is_buff_not_empty();
 
 int double_comp(const double a, const double b);
 
@@ -20,7 +20,7 @@ const double EPS = 1e-3;
 const int MAX_LEN_OF_OUT_STR = 48;
 
 enum NUM_ROOTS {
-    ZERO,
+    ZERO = 0,
     ONE_LIN,
     ONE_SQR,
     TWO_SQR,

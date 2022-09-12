@@ -4,7 +4,7 @@ void clean_buff() {
     while (getchar() != '\n') {}
 }
 
-int is_buff_empty() {
+int is_buff_not_empty() {
     if (getchar() == '\n')
         return FALSE;
     return TRUE;

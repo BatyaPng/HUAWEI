@@ -1,12 +1,12 @@
 #include "io.hpp"
 
 void input(double *a, double *b, double *c) {
-    assert(a || b || c);
+    assert(a && b && c);
 
     printf("Enter coefficients\n");
     int input = scanf("%lf%lf%lf", a, b, c);
 
-    while (is_buff_empty() || input != 3) {
+    while (is_buff_not_empty() || input != 3) {
         clean_buff();
         printf("Wrong input. Repeat\n");
         input = scanf("%lf%lf%lf", a, b, c);
