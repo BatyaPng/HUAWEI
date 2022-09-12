@@ -16,6 +16,8 @@ NUM_ROOTS quadratic_solve(const double a, const double b, const double c, double
     if (double_comp(D, 0) == LESS)
         return ZERO;
 
+    assert(x_1 && x_2);
+
     double sqrt_D = sqrt(D);
     if (double_comp(D, 0) == MORE) {
         *x_1 = (-b + sqrt_D) / (2 * a);
@@ -26,14 +28,13 @@ NUM_ROOTS quadratic_solve(const double a, const double b, const double c, double
         return ONE_SQR;
     }
 
-    printf("Runtime error\n");
-    abort();
+    return ZERO;
 }
 
 
 NUM_ROOTS solve(const double a, const double b, const double c, double *x_1, double *x_2) {
     assert(isnan(a) + isnan(b) + isnan(c) == 0);
-    assert(x_1 || x_2);
+    assert(x_1 && x_2);
 
     if (double_comp(a, 0) == EQUAL) {
         return lin_solve(b, c, x_1);

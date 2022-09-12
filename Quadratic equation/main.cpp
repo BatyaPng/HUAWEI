@@ -1,6 +1,6 @@
 #include "solve.hpp"
 #include "io.hpp"
-#include "test.hpp"
+#include "tests/test.hpp"
 
 int main(int argc, const char *argv[]) {
     double a = NAN, b = NAN, c = NAN, x_1 = NAN, x_2 = NAN;
