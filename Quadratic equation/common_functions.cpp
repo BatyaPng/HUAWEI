@@ -1,3 +1,5 @@
+/** @file */
+
 #include "common_functions.hpp"
 
 void clean_buff() {

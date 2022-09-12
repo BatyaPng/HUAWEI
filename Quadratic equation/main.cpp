@@ -1,3 +1,17 @@
+/**
+ * @file
+ *  
+ * @brief Entry point
+ *
+ * Execution of the program
+ * starts here.
+ *
+ * @param [in] argc Number of arguments
+ * @param [in] argv List of arguments
+ *
+ * @return Program exit status
+ */
+
 #include "solve.hpp"
 #include "io.hpp"
 #include "tests/test.hpp"

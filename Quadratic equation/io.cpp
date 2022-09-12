@@ -1,3 +1,5 @@
+/** @file */
+
 #include "io.hpp"
 
 void input(double *a, double *b, double *c) {
