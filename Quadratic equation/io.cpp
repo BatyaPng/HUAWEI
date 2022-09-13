@@ -34,6 +34,6 @@ void output(const double x_1, const double x_2, const enum NUM_ROOTS num_roots) 
         return;  
     default:
         printf("An error occurred while executing the program\n");
-        abort();
+        return;
     }
 }
