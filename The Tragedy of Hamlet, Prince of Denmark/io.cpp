@@ -2,25 +2,18 @@
 
 void input(FILE *fp) {
     fp = fopen("text.txt", "r");
-    if (fp == NULL) {
-        perror("fopen() failed");
+    
+    size_t fsize = get_fsize(fp);
+    if (fsize == 0) {
+        perror("get_fsize() failed");
         return;
     }
-
-    fseek(fp, 0, SEEK_END);
-    size_t fsize = (size_t) ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-
-    // printf("%d\n", fsize);  
 
     char *buffer = (char*) calloc(fsize + 1, sizeof(char));
     if (buffer == NULL) {
         perror("calloc() failed");
         return;
     }
-
-    // printf("%d\n", fsize);  
-
 
     size_t result = fread(buffer, 1, fsize, fp);
     if (result != fsize) {
@@ -29,6 +22,7 @@ void input(FILE *fp) {
     }
 
     fclose(fp);
+
     
     // puts(buffer);
     free(buffer);

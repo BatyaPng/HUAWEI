@@ -1,8 +1,7 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common_functions.hpp"
 
 void input(FILE *fp);
 void solve(FILE *fp);
