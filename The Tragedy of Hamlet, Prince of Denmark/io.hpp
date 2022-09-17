@@ -2,9 +2,10 @@
 #define _IO_H_
 
 #include "common_functions.hpp"
+#include "solution.hpp"
 
-void input(FILE *fp);
-void solve(FILE *fp);
+struct line *input(FILE *fp);
+
 void output(FILE *fp);
 
 #endif

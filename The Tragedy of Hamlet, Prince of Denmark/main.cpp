@@ -1,11 +1,18 @@
 #include "io.hpp"
 
 int main() {
-    FILE *fp = NULL;
+    FILE *src_fp = NULL, *dst_fp = NULL;
 
-    input(fp);
-    solve(fp);
-    output(fp);
+    struct line *buffer = input(src_fp);
+    if (buffer == NULL) {
+        perror("input() failed");
+        return -1;
+    }
+
+    solve(buffer);
+    // output(dst_fp);
+
+    free(buffer);
 
     return 0;
 }
