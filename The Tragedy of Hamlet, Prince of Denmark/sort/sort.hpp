@@ -8,7 +8,7 @@ struct line {
     size_t len = 0;
 };
 
-void solve(line *line);
+void sort(line *line);
 
 int line_cmp(const void *line_1, const void *line_2);
 

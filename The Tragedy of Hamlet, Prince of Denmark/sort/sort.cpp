@@ -1,6 +1,6 @@
 #include "sort.hpp"
 
-void solve(line *text) {
+void sort(line *text) {
     size_t cnt_lines = get_count_lines(*text);
 
     struct line *sub_linep = (struct line *) calloc(cnt_lines, sizeof(struct line));
