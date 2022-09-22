@@ -1,7 +1,7 @@
 #include "io.hpp"
 
 struct line *input(FILE *fp) {
-    fp = fopen("text.txt", "r");
+    fp = fopen("./text/text.txt", "r");
     
     size_t fsize = get_fsize(fp);
     if (fsize == 0) {

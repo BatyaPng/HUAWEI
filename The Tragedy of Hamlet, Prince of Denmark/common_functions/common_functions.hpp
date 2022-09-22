@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "solution.hpp"
+#include "../sort/sort.hpp"
 
 size_t get_fsize(FILE *fp);
 

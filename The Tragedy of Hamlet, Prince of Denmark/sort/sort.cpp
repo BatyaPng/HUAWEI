@@ -1,4 +1,4 @@
-#include "solution.hpp"
+#include "sort.hpp"
 
 void solve(line *text) {
     size_t cnt_lines = get_count_lines(*text);

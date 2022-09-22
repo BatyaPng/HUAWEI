@@ -1,7 +1,7 @@
-#ifndef _SOLUTION_H_
-#define _SOLUTION_H_
+#ifndef _SORT_H_
+#define _SORT_H_
 
-#include "common_functions.hpp"
+#include "../common_functions/common_functions.hpp"
 
 struct line {
     char *buffer = NULL;
