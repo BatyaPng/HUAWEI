@@ -3,16 +3,13 @@
 int main() {
     FILE *src_fp = NULL, *dst_fp = NULL;
 
-    struct line *buffer = input(src_fp);
-    if (buffer == NULL) {
+    text text = input(src_fp);
+    if (text.buffer == NULL) {
         perror("input() failed");
-        return -1;
+        return 1;
     }
 
-    sort_by_fw(buffer);
-    // output(dst_fp);
-
-    free(buffer);
-
+    sort_and_write(text, dst_fp);
+    
     return 0;
 }

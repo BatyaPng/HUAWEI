@@ -19,7 +19,7 @@ size_t get_fsize(FILE *fp) {
     return fsize;
 }
 
-size_t get_count_lines(line text) {
+size_t get_count_lines(const text text) {
     size_t c_str = 1;
 
     for(size_t i = 0; i < text.len; i++) {
@@ -34,3 +34,16 @@ size_t get_count_lines(line text) {
 }
 
 int min(const int a, const int b) { return (a < b) ? a : b; }
+
+void destructor(char *buffer, line *lines_p) {
+    if (buffer == NULL) {
+        perror("buffer null pointer");
+        return;
+    } else if (lines_p == NULL) {
+        perror("lines_p null pointer");
+        return;
+    }
+
+    free(buffer);
+    free(lines_p);
+}

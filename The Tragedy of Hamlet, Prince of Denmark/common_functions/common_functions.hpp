@@ -9,8 +9,10 @@
 
 size_t get_fsize(FILE *fp);
 
-size_t get_count_lines(struct line text);
+size_t get_count_lines(const struct text text);
 
 int min(const int a, const int b);
+
+void destructor(char *buffer, struct line *lines_p);
 
 #endif

@@ -4,8 +4,8 @@
 #include "../common_functions/common_functions.hpp"
 #include "../sort/sort.hpp"
 
-struct line *input(FILE *fp);
+struct text input(FILE *fp);
 
-void output(FILE *fp);
+void output(FILE *fp, struct line *lines_p, text text);
 
 #endif

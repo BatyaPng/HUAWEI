@@ -2,14 +2,25 @@
 #define _SORT_H_
 
 #include "../common_functions/common_functions.hpp"
+#include "../io/io.hpp"
 
 struct line {
     char *buffer = NULL;
     size_t len = 0;
 };
 
-void sort_by_fw(line *line);
+struct text {
+    char *buffer = NULL;
+    size_t len = 0;
+    size_t n_lines = 0;
+};
 
-int line_cmp(const void *line_1, const void *line_2);
+struct line *get_lines(const text text);
+
+void sort_and_write(const text text, FILE *fp);
+
+int cmp_by_fc(const void *line_1, const void *line_2);
+
+int cmp_by_lc(const void *line_1, const void *line_2);
 
 #endif

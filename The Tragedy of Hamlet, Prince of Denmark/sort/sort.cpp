@@ -1,51 +1,72 @@
 #include "sort.hpp"
 
-void sort_by_fw(line *text) {
-    size_t cnt_lines = get_count_lines(*text);
+struct line *get_lines(const text text) {
+    if (text.buffer == NULL) {
+        perror("text.buffer null pointer");
+        return NULL;
+    }
 
-    struct line *sub_linep = (struct line *) calloc(cnt_lines, sizeof(struct line));
-    if(sub_linep == NULL) {
+    size_t cnt_lines = get_count_lines(text);
+
+    struct line *lines_p = (struct line *) calloc(cnt_lines, sizeof(struct line));
+    if (lines_p == NULL) {
         perror("calloc() failed");
-        return;
+        return NULL;
     }
 
     size_t n_str = 0;
+    size_t len = 0;
+    char ch = 0;
 
-    for(size_t i = 0; i < text -> len; i++) {
-        size_t len = 0;
-        char ch = text -> buffer[i];  
+    for (size_t i = 0; i < text.len; i++) {
+        len = 0;
+        ch = text.buffer[i];  
 
         if (isalpha(ch)) {
-            sub_linep[n_str].buffer = &(text -> buffer[i]);
+            lines_p[n_str].buffer = &(text.buffer[i]);
 
-            while (((ch = text -> buffer[i]) != '\n') && ch != 0) {
+            while (((ch = text.buffer[i]) != '\n') && (ch != 0)) {
                 len++;
                 i++;
             }
-            sub_linep[n_str].len = len + 1;
+
+            lines_p[n_str].len = len + 1;
             n_str++;
         }
     }
 
-    for (size_t i = 0; i < cnt_lines; i++) {
-        for (size_t j = 0; j < sub_linep[i].len; j++) {
-            printf("%c", sub_linep[i].buffer[j]);
-        }
-    }
-    
-    qsort(sub_linep, cnt_lines, sizeof(struct line), line_cmp);
-
-    for (size_t i = 0; i < cnt_lines; i++) {
-        for (size_t j = 0; j < sub_linep[i].len; j++) {
-            printf("%c", sub_linep[i].buffer[j]);
-        }
-    }
-
-    free(text -> buffer);
-    free(sub_linep);
+    return lines_p;
 }
 
-int line_cmp(const void *str_1, const void *str_2) {
+void sort_and_write(const text text, FILE *fp) {
+    if (text.buffer == NULL) {
+        perror("text.buffer null pointer");
+        return;
+    }
+
+    fp = fopen("result.txt", "w");
+
+    line *lines_p = get_lines(text);
+
+    qsort(lines_p, text.n_lines, sizeof(struct line), cmp_by_fc);
+    output(fp, lines_p, text);
+
+    qsort(lines_p, text.n_lines, sizeof(struct line), cmp_by_lc);
+    output(fp, lines_p, text);
+
+    size_t result = fwrite(text.buffer, sizeof(char), text.len - 1, fp);
+    if (result != text.len - 1) {
+        perror("fwrite() failed");
+        return;
+    }
+
+    destructor(text.buffer, lines_p);
+
+    fclose(fp);
+}
+
+
+int cmp_by_fc(const void *str_1, const void *str_2) {
     const line *line_1 = (const line *) str_1;
     const line *line_2 = (const line *) str_2;
 
@@ -58,11 +79,34 @@ int line_cmp(const void *str_1, const void *str_2) {
         ch_1 = line_1 -> buffer[i];
         ch_2 = line_2 -> buffer[i];
 
-        // printf("%c", ch_1);
-
-        if (isalpha(ch_1) && isalpha(ch_2)) {
+        if ((ch_1 != ch_2) && (isalpha(ch_1) && isalpha(ch_2))) {
             return (int) ch_1 - (int) ch_2;
         }       
+    }
+
+    return 0;
+}
+
+int cmp_by_lc(const void *str_1, const void *str_2) {
+    const line *line_1 = (const line *) str_1;
+    const line *line_2 = (const line *) str_2;
+
+    int i_line1 = (int) line_1 -> len - 1;
+    int i_line2 = (int) line_2 -> len - 1;
+
+    char ch_1 = 0;
+    char ch_2 = 0;
+
+    while (i_line1 >= 0 && i_line2 >= 0) {
+        ch_1 = line_1 -> buffer[i_line1];
+        ch_2 = line_2 -> buffer[i_line2];
+
+        if ((ch_1 != ch_2) && (isalpha(ch_1) && isalpha(ch_2))) {
+            return (int) ch_1 - (int) ch_2;
+        }
+
+        i_line1--;
+        i_line2--;
     }
 
     return 0;
