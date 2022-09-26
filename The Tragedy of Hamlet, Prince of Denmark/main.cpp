@@ -9,7 +9,7 @@ int main() {
         return -1;
     }
 
-    solve(buffer);
+    sort_by_fw(buffer);
     // output(dst_fp);
 
     free(buffer);
