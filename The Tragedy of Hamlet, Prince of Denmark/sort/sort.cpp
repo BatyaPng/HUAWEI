@@ -111,3 +111,18 @@ int cmp_by_lc(const void *str_1, const void *str_2) {
 
     return 0;
 }
+
+void swap(void *arr[], size_t i, size_t j, size_t size_elem) {
+    if (arr == NULL) {
+        perror("null poiner arr[] passed");
+        return;
+    }
+
+    void *tmp = calloc(1, size_elem);
+    memcpy(tmp ,((*(char **) arr) + i * size_elem), size_elem);
+
+    memcpy(((*(char **) arr) + i * size_elem), ((*(char **) arr) + j * size_elem), size_elem);
+    memcpy(((*(char **) arr) + j * size_elem), tmp, size_elem);
+
+    free(tmp);
+}

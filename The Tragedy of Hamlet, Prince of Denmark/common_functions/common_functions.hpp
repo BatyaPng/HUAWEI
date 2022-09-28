@@ -15,4 +15,8 @@ int min(const int a, const int b);
 
 void destructor(char *buffer, struct line *lines_p);
 
+void swap(void *arr[], size_t i, size_t j);
+
+void my_qsort(void *arr[], size_t count, size_t size, int (*comp)(const void *, const void *));
+
 #endif
