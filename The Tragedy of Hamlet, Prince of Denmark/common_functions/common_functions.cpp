@@ -48,60 +48,76 @@ void destructor(char *buffer, line *lines_p) {
     free(lines_p);
 }
 
-void swap(void *arr[], size_t i, size_t j, size_t size) {
+void swap(void *arr[], size_t i, size_t j, size_t size_elem) {
     if (arr == NULL) {
         perror("null poiner arr[] passed");
         return;
     }
 
-    void *tmp = calloc(1, size);
-    memcpy(tmp ,((*(char **) arr) + i * size), size);
+    void *tmp = calloc(1, size_elem);
+    memcpy(tmp ,((*(char **) arr) + i * size_elem), size_elem);
 
-    memcpy(((*(char **) arr) + i * size), ((*(char **) arr) + j * size), size);
-    memcpy(((*(char **) arr) + j * size), tmp, size);
+    memcpy(((*(char **) arr) + i * size_elem), ((*(char **) arr) + j * size_elem), size_elem);
+    memcpy(((*(char **) arr) + j * size_elem), tmp, size_elem);
 
     free(tmp);
 }
 
-void my_qsort(void *arr, size_t count, size_t size, int (*comp)(const void *, const void *)) {
+void my_qsort(void *arr, size_t count, size_t size_elem, int (*comp)(const void *, const void *)) {
     if (arr == NULL) {
         perror("null pointer arr passed");
         return;
+    }
+
+    if (size_elem == sizeof(char)) {
+        char last_elem = ((char *) arr)[count - 1];
+
+        while (last_elem == 0) {
+            count--;
+            last_elem = ((char *) arr)[count - 1];
+        }
     }
 
     if (count == 1) {
         return;
     }
 
-    size_t middle = count / 2;
     size_t left = 0;
+    size_t middle = count / 2;
     size_t right = count - 1;
 
-    void *middle_elem = NULL;
     void *left_elem = NULL;
+    void *middle_elem = NULL;
     void *right_elem = NULL;
 
     do {
-        middle_elem = (void *) ((char*) arr + (size * middle));
-        left_elem = (void *) ((char*) arr + (size * left));
-        right_elem = (void *) ((char*) arr + (size * right));
+        left_elem = (void *) ((char*) arr + (size_elem * left));
+        middle_elem = (void *) ((char*) arr + (size_elem * middle));
+        right_elem = (void *) ((char*) arr + (size_elem * right));
 
         while ((*comp)(left_elem, middle_elem) < 0) {
             left++;
+            left_elem = (void *) ((char*) arr + (size_elem * left));
         }
 
         while ((*comp)(right_elem, middle_elem) > 0) {
             right--;
+            right_elem = (void *) ((char*) arr + (size_elem * right));
         }
 
-        swap(arr, left, right, size);
-        left++;
-        right--;
+        if (left <= right) {
+            swap(&arr, left, right, size_elem);
+
+            left++;
+            right--;
+        }
 
     } while (left <= right);
 
-    my_qsort(arr, middle, size, comp);
-
-    void *r_arr = (void *) ((char *) arr + size * middle); 
-    my_qsort(r_arr, count - middle, size, comp);
+    if (right > 0)
+        my_qsort(arr, right + 1, size_elem, comp);
+    if (left < count) {
+        void *r_arr = (void *) ((char *) arr + size_elem * left); 
+        my_qsort(r_arr, count - left, size_elem, comp);
+    }
 }
