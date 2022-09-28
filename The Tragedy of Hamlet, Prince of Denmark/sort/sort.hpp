@@ -23,8 +23,8 @@ int cmp_by_fc(const void *line_1, const void *line_2);
 
 int cmp_by_lc(const void *line_1, const void *line_2);
 
-void my_qsort(void *ptr, size_t count, size_t size_one_elem, int (*comp)(const void *, const void *));
-
 void swap(void *arr[], size_t i, size_t j, size_t size_elem);
+
+void my_qsort(void *ptr, size_t count, size_t size_one_elem, int (*comp)(const void *, const void *));
 
 #endif
