@@ -1,7 +1,5 @@
 #include "sort.hpp"
 
-// #define STD_QSORT
-
 struct line *get_lines(const text text) {
     if (text.buffer == NULL) {
         perror("text.buffer null pointer");
@@ -39,48 +37,6 @@ struct line *get_lines(const text text) {
 
     return lines_p;
 }
-
-void sort_and_write(const text text, FILE *fp) {
-    if (text.buffer == NULL) {
-        perror("text.buffer null pointer");
-        return;
-    }
-
-    #ifdef STD_QSORT
-        fp = fopen("result1.txt", "w");
-    #else
-        fp = fopen("result2.txt", "w");
-    #endif
-
-    line *lines_p = get_lines(text);
-
-    #ifdef STD_QSORT
-        qsort(lines_p, text.n_lines, sizeof(struct line), cmp_by_fc);
-    #else
-        my_qsort(lines_p, text.n_lines, sizeof(struct line), cmp_by_fc);
-    #endif 
-
-    output(fp, lines_p, text);
-
-    #ifdef STD_QSORT
-        qsort(lines_p, text.n_lines, sizeof(struct line), cmp_by_lc);
-    #else
-        my_qsort(lines_p, text.n_lines, sizeof(struct line), cmp_by_lc);
-    #endif 
-
-    output(fp, lines_p, text);
-
-    size_t result = fwrite(text.buffer, sizeof(char), text.len - 1, fp);
-    if (result != text.len - 1) {
-        perror("fwrite() failed");
-        return;
-    }
-
-    destructor(text.buffer, lines_p);
-
-    fclose(fp);
-}
-
 
 int cmp_by_fc(const void *str_1, const void *str_2) {
     const line *line_1 = (const line *) str_1;

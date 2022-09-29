@@ -31,28 +31,36 @@ struct text input(FILE *fp) {
     return text;
 }
 
-void output(FILE *fp, line *lines_p, text text) {
-    if (lines_p == NULL) {
-        perror("lines_p null pointer");
-        return;
-    } else if (fp == NULL) {
-        perror("fp null pointer");
-        return;        
-    }
+void output(FILE *fp, line *lines_p, text text, MODE mode) {
+    if (mode == AFTER_SORTING) {
+        if (lines_p == NULL) {
+            perror("lines_p null pointer");
+            return;
+        } else if (fp == NULL) {
+            perror("fp null pointer");
+            return;        
+        }
 
-    size_t n_lines = text.n_lines;
-    char letter = 0;
+        size_t n_lines = text.n_lines;
+        char letter = 0;
 
-    for (size_t i = 0; i < n_lines; i++) {
-        for (size_t j = 0; j < lines_p[i].len; j++) {
-            letter = lines_p[i].buffer[j];
+        for (size_t i = 0; i < n_lines; i++) {
+            for (size_t j = 0; j < lines_p[i].len; j++) {
+                letter = lines_p[i].buffer[j];
 
-            if (letter == 0) {
-                fprintf(fp, "\n");
-            } else
-                fprintf(fp, "%c", letter);
+                if (letter == 0) {
+                    fprintf(fp, "\n");
+                } else
+                    fprintf(fp, "%c", letter);
+            }
+        }
+
+        fprintf(fp, "\n");
+    } else if (mode == BEFORE_SORTING) {
+        size_t result = fwrite(text.buffer, sizeof(char), text.len - 1, fp);
+        if (result != text.len - 1) {
+            perror("fwrite() failed");
+            return;
         }
     }
-
-    fprintf(fp, "\n");
 }

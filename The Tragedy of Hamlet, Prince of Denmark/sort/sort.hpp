@@ -17,8 +17,6 @@ struct text {
 
 struct line *get_lines(const text text);
 
-void sort_and_write(const text text, FILE *fp);
-
 int cmp_by_fc(const void *line_1, const void *line_2);
 
 int cmp_by_lc(const void *line_1, const void *line_2);
