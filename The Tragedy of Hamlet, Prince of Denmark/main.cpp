@@ -17,6 +17,11 @@ int main() {
         dst_fp = fopen("result2.txt", "w");
     #endif
 
+    if (dst_fp == NULL) {
+        perror("fopen() failed");
+        return 1;
+    }
+
     line *lines_p = get_lines(text);
 
     #ifdef STD_QSORT
