@@ -6,7 +6,7 @@ struct line *get_lines(const text text) {
         return NULL;
     }
 
-    size_t cnt_lines = get_count_lines(text);
+    size_t cnt_lines = text.n_lines;
 
     struct line *lines_p = (struct line *) calloc(cnt_lines, sizeof(struct line));
     if (lines_p == NULL) {
