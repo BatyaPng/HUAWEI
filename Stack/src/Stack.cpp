@@ -1,10 +1,19 @@
-#include "stack.hpp"
+#include "Stack.hpp"
+
+// #define DEBUG
 
 #define POISON NAN
 #define POISON_SPECIFIER "lg"
 
-int StackCtor(Stack *stk, elem_t value) {
+int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
     ASSERTED(NP, stk, NULL, 1);
+
+    #ifdef DUBUG
+        stk->VarInfo.fileName = fileName;
+        stk->VarInfo.funcName = funcName;
+        stk->VarInfo.lineNumber = lineNumber;
+        stk->VarInfo.varName = varName;
+    #endif
 
     stk->data = (elem_t *) calloc(FIRST_CAPACITY_STACK, sizeof(elem_t));
     ASSERTED(calloc, stk->data, NULL, 2);
@@ -89,25 +98,31 @@ int StackPop(Stack *stk, elem_t *var) {
     return 0;
 }
 
-int StackDump(const Stack stk) {
+int StackDumpFunc(const Stack stk , FILE* streamOut VAR_INFO_PARAM) {
     // StackVerify
 
-    printf("================================================================\n");
+    ASSERTED(NP, funcName, NULL, NP_PASSED);
+    ASSERTED(NP, fileName, NULL, NP_PASSED);
+    ASSERTED(NP, streamOut, NULL, NP_PASSED);
 
-    printf("size = %lu\n", stk.size);
-    printf("capacity = %lu\n", stk.capacity);
-    printf("\ndata[%p] {\n", (void *) &stk.data);
+    fprintf(streamOut, "================================================================\n");
+    
+    fprintf(streamOut, "%s at %s(%ld):\n", funcName, fileName, lineNumber);
+    fprintf(streamOut, "Stack[%p] (ok) \"%s\" at \"%s\" at %s(%ld)\n\n", &stk, stk.VarInfo.varName, stk.VarInfo.funcName, stk.VarInfo.fileName, stk.VarInfo.lineNumber);
+
+    fprintf(streamOut, "size = %lu\n", stk.size);
+    fprintf(streamOut, "capacity = %lu\n", stk.capacity);
+    fprintf(streamOut, "\ndata[%p] {\n", (void *) &stk.data);
 
     for (size_t i = 0; i < stk.size; i++) {
-        printf("    [%lu] = %" POISON_SPECIFIER "\n", i, stk.data[i]);
+        fprintf(streamOut, "    [%lu] = %" POISON_SPECIFIER "\n", i, stk.data[i]);
     }
 
     for (size_t i = stk.size; i < stk.capacity; i++) {
-        printf("    [%lu] = POISON\n", i);
+        fprintf(streamOut, "    [%lu] = POISON\n", i);
     }
 
-    printf("}\n");
-    printf("================================================================\n");
+    fprintf(streamOut, "}\n");
 
-    return 0;    
+    return 0;
 }

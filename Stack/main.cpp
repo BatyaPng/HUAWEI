@@ -9,14 +9,14 @@ int main() {
         StackPush(&stk, i);
     }
 
-    // StackDump(stk);
+    StackDump(stk, stdout);
 
     for (double i = 0; i < 7; i++) {
         elem_t var = NAN;
         StackPop(&stk, &var);
     }
 
-    // StackDump(stk);
+    StackDump(stk, stdout);
 
     StackDtor(&stk);
 }
