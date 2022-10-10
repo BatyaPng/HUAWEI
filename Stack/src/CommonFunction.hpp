@@ -8,7 +8,7 @@
 // enum ASSERTED_MODE {}
 
 #define ASSERTED(func, var, cntrlValue, retValue) \
-    if (strcmp(#func, "NP\0")) { \
+    if (strcmp(#func, "NP") == 0) { \
         if (var == cntrlValue) { \
         perror("null pointer passed"); \
         \

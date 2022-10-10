@@ -1,11 +1,22 @@
-#include "Stack/Stack.hpp"
+#include "src/Stack.hpp"
 
 int main() {
     Stack stk = {};
 
     StackCtor(&stk, 5);
 
-    printf("%lg\n", stk.data[1]); 
+    for (double i = 0; i < 7; i++) {
+        StackPush(&stk, i);
+    }
+
+    // StackDump(stk);
+
+    for (double i = 0; i < 7; i++) {
+        elem_t var = NAN;
+        StackPop(&stk, &var);
+    }
+
+    // StackDump(stk);
 
     StackDtor(&stk);
 }
