@@ -2,7 +2,7 @@
 
 int main() {
     Stack stk = {};
-
+    
     StackCtor(&stk, 5);
 
     for (double i = 0; i < 7; i++) {
@@ -16,7 +16,6 @@ int main() {
         StackPop(&stk, &var);
     }
 
-    StackDump(stk, stdout);
 
     StackDtor(&stk);
 }

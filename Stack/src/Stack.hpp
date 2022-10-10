@@ -23,10 +23,10 @@ enum MODE_STACK_RESIZE {
 
 #ifdef DEBUG
     struct VarInfo {
-        char *fileName;
-        char *funcName;
+        const char *fileName;
+        const char *funcName;
         size_t lineNumber;
-        char *varName;
+        const char *varName;
     };
 #endif
 
@@ -42,7 +42,7 @@ struct Stack {
 
 #ifdef DEBUG
     #define VAR_INFO_PARAM , const char *fileName, const char *funcName, const size_t lineNumber, const char *varName
-    #define VAR_INFO(varName) , __FILE__, __func__, __LINE__, #varName 
+    #define VAR_INFO(varName) , __FILE__, __func__, __LINE__, #varName + 1
 #else  
     #define VAR_INFO_PARAM
     #define VAR_INFO(...)

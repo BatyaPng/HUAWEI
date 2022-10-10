@@ -8,12 +8,12 @@
 int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
     ASSERTED(NP, stk, NULL, 1);
 
-    #ifdef DUBUG
+    // #ifdef DUBUG
         stk->VarInfo.fileName = fileName;
         stk->VarInfo.funcName = funcName;
         stk->VarInfo.lineNumber = lineNumber;
         stk->VarInfo.varName = varName;
-    #endif
+    // #endif
 
     stk->data = (elem_t *) calloc(FIRST_CAPACITY_STACK, sizeof(elem_t));
     ASSERTED(calloc, stk->data, NULL, 2);
