@@ -7,7 +7,10 @@
 #include <math.h>
 
 enum ERROR_CODES {
-    NP_PASSED = 1
+    NP_PASSED = 1,
+    CALLOC_FAILED,
+    REALLOC_FAILED,
+    NULL_SIZE_STACK
 };
 
 typedef double elem_t;

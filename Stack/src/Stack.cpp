@@ -4,9 +4,17 @@
 #define POISON_SPECIFIER "lg"
 
 #define DEBUG
+#define CANARY_PROT
+
+#ifdef CANARY_PROT
+    #define ON_CANARY_PROT(...) __VA_ARGS__
+    #define CANARY_SIZE sizeof(long double)
+#else 
+    #define ON_CANARY_PROT(...) 
+#endif
 
 int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
-    ASSERTED(NP, stk, NULL, 1);
+    ASSERTED(NP, stk, NULL, NP_PASSED);
 
     #ifdef DEBUG
         stk->VarInfo.fileName = fileName;
@@ -15,16 +23,17 @@ int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
         stk->VarInfo.varName = varName;
     #endif
 
-    stk->data = (elem_t *) calloc(FIRST_CAPACITY_STACK, sizeof(elem_t));
-    ASSERTED(calloc, stk->data, NULL, 2);
+    void *tmp = calloc(1, FIRST_CAPACITY_STACK * sizeof(elem_t) ON_CANARY_PROT(+ 2 * CANARY_SIZE));
+    ASSERTED(calloc, tmp, NULL, CALLOC_FAILED);
+
+    stk->data = (elem_t *) ((char *) tmp ON_CANARY_PROT(+ CANARY_SIZE));
 
     for (int i = 0; i < FIRST_CAPACITY_STACK; i++) {
         stk->data[i] = POISON;
     }
 
     stk->capacity = FIRST_CAPACITY_STACK;
-    stk->size++;
-    stk->data[0] = value;
+    stk->data[stk->size++] = value;
 
     return 0;
 }
@@ -36,7 +45,7 @@ int StackDtor(Stack *stk) {
         stk->data[i] = POISON;
     }
 
-    free(stk->data);
+    free((char *) stk->data ON_CANARY_PROT(- CANARY_SIZE));
 
     return 0;
 }
@@ -45,18 +54,21 @@ static int StackResize(Stack *stk, MODE_STACK_RESIZE mode) {
     // StackVerify;
 
     void *tmpBuf = NULL;
+    ON_CANARY_PROT(stk->data = (elem_t *) ((char *) stk->data - CANARY_SIZE));
     
     if (mode == UP) {
-        tmpBuf = realloc(stk->data, 2 * (stk->capacity) * sizeof(elem_t));
-        ASSERTED(realloc, tmpBuf, NULL, 1);
+        ON_CANARY_PROT(size_t alignment = (CANARY_SIZE > sizeof(elem_t)) ? sizeof(elem_t) : CANARY_SIZE);
 
-        stk->data = (elem_t *) tmpBuf;
+        tmpBuf = realloc(stk->data, 2 * (stk->capacity) * sizeof(elem_t) ON_CANARY_PROT(+ CANARY_SIZE + alignment));
+        ASSERTED(realloc, tmpBuf, NULL, REALLOC_FAILED);
+
+        stk->data = (elem_t *) ((char *) tmpBuf ON_CANARY_PROT(+ CANARY_SIZE));
         stk->capacity *= 2;
     } else {
-        tmpBuf = realloc(stk->data, (stk->capacity)  / 2 * sizeof(elem_t));
-        ASSERTED(realloc, tmpBuf, NULL, 1);
+        tmpBuf = realloc(stk->data, stk->capacity  / 2 * sizeof(elem_t) ON_CANARY_PROT(+ 2 * CANARY_SIZE));
+        ASSERTED(realloc, tmpBuf, NULL, REALLOC_FAILED);
 
-        stk->data = (elem_t *) tmpBuf;
+        stk->data = (elem_t *) ((char *) tmpBuf ON_CANARY_PROT(+ CANARY_SIZE));
         stk->capacity /= 2;
     }
 
@@ -92,7 +104,7 @@ int StackPop(Stack *stk, elem_t *var) {
             StackResize(stk, DOWN);
         }
     } else {
-        return 1;
+        return NULL_SIZE_STACK;
     }
 
     return 0;
@@ -101,14 +113,19 @@ int StackPop(Stack *stk, elem_t *var) {
 int StackDumpFunc(const Stack stk , FILE* streamOut VAR_INFO_PARAM) {
     // StackVerify
 
-    ASSERTED(NP, funcName, NULL, NP_PASSED);
-    ASSERTED(NP, fileName, NULL, NP_PASSED);
+    #ifdef DEBUG
+        ASSERTED(NP, funcName, NULL, NP_PASSED);
+        ASSERTED(NP, fileName, NULL, NP_PASSED);
+    #endif
+
     ASSERTED(NP, streamOut, NULL, NP_PASSED);
 
     fprintf(streamOut, "================================================================\n");
     
-    fprintf(streamOut, "%s at %s(%ld):\n", funcName, fileName, lineNumber);
-    fprintf(streamOut, "Stack[%p] (ok) \"%s\" at \"%s\" at %s(%ld)\n\n", &stk, stk.VarInfo.varName, stk.VarInfo.funcName, stk.VarInfo.fileName, stk.VarInfo.lineNumber);
+    #ifdef DEBUG
+        fprintf(streamOut, "%s() at %s(%ld):\n", funcName, fileName, lineNumber);
+        fprintf(streamOut, "Stack[%p] (ok) \"%s\" at %s() at %s(%ld)\n\n", &stk, stk.VarInfo.varName, stk.VarInfo.funcName, stk.VarInfo.fileName, stk.VarInfo.lineNumber);
+    #endif
 
     fprintf(streamOut, "size = %lu\n", stk.size);
     fprintf(streamOut, "capacity = %lu\n", stk.capacity);
