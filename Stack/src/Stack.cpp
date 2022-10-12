@@ -5,12 +5,21 @@
 
 #define DEBUG
 #define CANARY_PROT
+#define HASH_PROT
 
 #ifdef CANARY_PROT
     #define ON_CANARY_PROT(...) __VA_ARGS__
     #define CANARY_SIZE sizeof(long double)
 #else 
     #define ON_CANARY_PROT(...) 
+#endif
+
+#ifdef HASH_PROT
+    #define ON_HASH_PROT(...) __VA_ARGS__
+    #define CALCULATE_HASH(stk) *(stk->hashP) = HashFAQ6(&stk, sizeof(stk));
+#else 
+    #define ON_HASH_PROT(...)
+    #define CALCULATE_HASH(...) 
 #endif
 
 int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
@@ -34,6 +43,12 @@ int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
 
     stk->capacity = FIRST_CAPACITY_STACK;
     stk->data[stk->size++] = value;
+
+    #ifdef HASH_PROT
+        stk->hashP = (size_t *) calloc(1, sizeof(size_t));
+        ASSERTED(calloc, stk, NULL, CALLOC_FAILED);
+        CALCULATE_HASH(stk);
+    #endif
 
     return 0;
 }
@@ -76,6 +91,8 @@ static int StackResize(Stack *stk, MODE_STACK_RESIZE mode) {
         (stk->data)[i] = POISON;
     }
 
+    CALCULATE_HASH(stk);
+
     return 0;     
 }
 
@@ -89,6 +106,8 @@ int StackPush(Stack *stk, elem_t value) {
 
     stk->data[stk->size] = value;
     stk->size++;
+
+    CALCULATE_HASH(stk);
 
     return 0;
 }
@@ -106,6 +125,8 @@ int StackPop(Stack *stk, elem_t *var) {
     } else {
         return NULL_SIZE_STACK;
     }
+
+    CALCULATE_HASH(stk);
 
     return 0;
 }
@@ -143,3 +164,4 @@ int StackDumpFunc(const Stack stk , FILE* streamOut VAR_INFO_PARAM) {
 
     return 0;
 }
+

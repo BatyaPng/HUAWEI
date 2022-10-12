@@ -2,6 +2,7 @@
 #define _STACK_H_
 
 #define DEBUG
+#define HASH_PROT
 
 #include "CommonFunction.hpp"
 #include <math.h>
@@ -41,6 +42,10 @@ struct Stack {
     #ifdef DEBUG
         struct VarInfo VarInfo = {};
     #endif 
+
+    #ifdef HASH_PROT
+        size_t *hashP = NULL;
+    #endif
 };
 
 #ifdef DEBUG
