@@ -1,6 +1,6 @@
 #include "CommonFunction.hpp"
 
-size_t HashFAQ6(void *data, size_t size) {
+size_t HashFAQ6(const void *data, size_t size) {
     size_t hash = 0;
     char *str = (char *) data;
 

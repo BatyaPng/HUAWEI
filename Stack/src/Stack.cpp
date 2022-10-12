@@ -9,18 +9,21 @@
 
 #ifdef CANARY_PROT
     #define ON_CANARY_PROT(...) __VA_ARGS__
-    #define CANARY_SIZE sizeof(long double)
+    #define CANARY_TYPE long long int
+    #define CANARY_SIZE sizeof(CANARY_TYPE)
 #else 
     #define ON_CANARY_PROT(...) 
 #endif
 
 #ifdef HASH_PROT
     #define ON_HASH_PROT(...) __VA_ARGS__
-    #define CALCULATE_HASH(stk) *(stk->hashP) = HashFAQ6(&stk, sizeof(stk));
+    #define CALCULATE_HASH(stk) *(stk->hashP) = HashFAQ6(stk, sizeof(*stk));
 #else 
     #define ON_HASH_PROT(...)
     #define CALCULATE_HASH(...) 
 #endif
+
+
 
 int StackCtorFunc(Stack *stk, elem_t value VAR_INFO_PARAM) {
     ASSERTED(NP, stk, NULL, NP_PASSED);
@@ -77,18 +80,24 @@ static int StackResize(Stack *stk, MODE_STACK_RESIZE mode) {
         tmpBuf = realloc(stk->data, 2 * (stk->capacity) * sizeof(elem_t) ON_CANARY_PROT(+ CANARY_SIZE + alignment));
         ASSERTED(realloc, tmpBuf, NULL, REALLOC_FAILED);
 
-        stk->data = (elem_t *) ((char *) tmpBuf ON_CANARY_PROT(+ CANARY_SIZE));
         stk->capacity *= 2;
+
+        ON_CANARY_PROT(*(CANARY_TYPE *) ((char *) tmpBuf + stk->capacity) = 0);
+
+        stk->data = (elem_t *) ((char *) tmpBuf ON_CANARY_PROT(+ CANARY_SIZE));
     } else {
         tmpBuf = realloc(stk->data, stk->capacity  / 2 * sizeof(elem_t) ON_CANARY_PROT(+ 2 * CANARY_SIZE));
         ASSERTED(realloc, tmpBuf, NULL, REALLOC_FAILED);
 
-        stk->data = (elem_t *) ((char *) tmpBuf ON_CANARY_PROT(+ CANARY_SIZE));
         stk->capacity /= 2;
+
+        ON_CANARY_PROT(*(CANARY_TYPE *) ((char *) tmpBuf + stk->capacity) = 0);
+
+        stk->data = (elem_t *) ((char *) tmpBuf ON_CANARY_PROT(+ CANARY_SIZE));
     }
 
     for (size_t i = stk->size; i < stk->capacity; i++) {
-        (stk->data)[i] = POISON;
+        stk->data[i] = POISON;
     }
 
     CALCULATE_HASH(stk);
@@ -132,7 +141,12 @@ int StackPop(Stack *stk, elem_t *var) {
 }
 
 int StackDumpFunc(const Stack stk , FILE* streamOut VAR_INFO_PARAM) {
-    // StackVerify
+    int errorCode = StackVerify(&stk);
+    if (errorCode != 0) {
+        fprintf(streamOut, "Error code: %d\n", errorCode);
+        StackErrorOut(errorCode, streamOut);
+        return errorCode;
+    } 
 
     #ifdef DEBUG
         ASSERTED(NP, funcName, NULL, NP_PASSED);
@@ -158,10 +172,42 @@ int StackDumpFunc(const Stack stk , FILE* streamOut VAR_INFO_PARAM) {
 
     for (size_t i = stk.size; i < stk.capacity; i++) {
         fprintf(streamOut, "    [%lu] = POISON\n", i);
-    }
+    } 
 
     fprintf(streamOut, "}\n");
 
     return 0;
 }
 
+int StackVerify(const Stack *stk) {
+    size_t errorCode = 0;
+
+    if (stk == NULL)               errorCode |= NP_STACK;
+    if (stk->data == NULL)         errorCode |= NP_DATA;
+    if (stk->data[0] == POISON)    errorCode |= POISON_DATA;
+    if (stk->capacity < stk->size) errorCode |= CAPACITY_LESS_SIZE;
+
+    #ifdef CANARY_PROT
+        CANARY_TYPE leftCanary = *(CANARY_TYPE *) ((char *) stk->data - CANARY_SIZE);
+        CANARY_TYPE rightCanary = *(CANARY_TYPE *) ((char *) stk->data + stk->capacity);
+
+        if (leftCanary != 0)   errorCode |= LEFT_CANARY_DAMAGED;
+        if (rightCanary != 0)  errorCode |= RIGHT_CANARY_DAMAGED;
+    #endif
+
+    ON_HASH_PROT(if (*(stk->hashP) != HashFAQ6(stk, sizeof(*stk))) errorCode |= BAD_HASH);
+
+    return errorCode;
+}
+
+void StackErrorOut(int errorCode, FILE *streamOut) {
+    size_t errorNumber = 0;
+
+    for (size_t i = 1; i <= errorsNumber - 1; i <<= 1) {
+        if ((errorCode & i) == i) {
+            fprintf(streamOut,"%s\n", errorNames[errorNumber]);
+        }
+
+        errorNumber++;
+    }
+}

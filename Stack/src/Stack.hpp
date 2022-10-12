@@ -7,13 +7,27 @@
 #include "CommonFunction.hpp"
 #include <math.h>
 
-enum ERROR_CODES {
-    NP_PASSED = 1,
-    CALLOC_FAILED,
-    REALLOC_FAILED,
-    NULL_SIZE_STACK
-};
+enum STACK_ERROR_CODES {
+    NP_STACK                = 0b0000001,    
+    NP_DATA                 = 0b0000010,    
+    POISON_DATA             = 0b0000100,    
+    CAPACITY_LESS_SIZE      = 0b0001000,
+    LEFT_CANARY_DAMAGED     = 0b0010000,        
+    RIGHT_CANARY_DAMAGED    = 0b0100000,
+    BAD_HASH                = 0b1000000,
+    errorsNumber    
+}; 
 
+static const char *errorNames[] = {
+    "Null pointer to stack",
+    "Null pointer to stack data",
+    "Poison stack",
+    "Capacity less size",
+    "Left canary damaged",
+    "Right canary damaged",
+    "Bad hash"
+};
+   
 typedef double elem_t;
 
 enum MAGIC_NUMBERS {
@@ -67,8 +81,10 @@ int StackPop(Stack *stk, elem_t *value);
 
 int StackDtor(Stack *stk);
 
-int StackVerify(const Stack stk);
+int StackVerify(const Stack *stk);
 
 int StackDumpFunc(const Stack stk , FILE* streamOut VAR_INFO_PARAM);
+
+void StackErrorOut(int errorCode, FILE *streamOut);
 
 #endif
