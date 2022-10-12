@@ -5,18 +5,19 @@
 #include <stdio.h>
 #include <string.h>
 
-// enum ASSERTED_MODE {}
-
-#define ASSERTED(func, var, cntrlValue, retValue) \
-    if (strcmp(#func, "NP") == 0) {               \
-        if (var == cntrlValue) {                  \
-        perror("null pointer passed");            \
-                                                  \
-        return retValue;                          \
-        }                                         \
-    } else if (var == cntrlValue) {               \
-        perror(#func"() failed");                 \
-        return retValue;                          \
+#define ASSERTED(func, var, cntrlValue, retValue)   \
+    if (strcmp(#func, "NP") == 0) {                 \
+        if (var == cntrlValue) {                    \
+            perror("null pointer passed");          \
+                                                    \
+            return retValue;                        \
+        }                                           \
+    } else if (var == cntrlValue) {                 \
+        perror(#func"() failed");                   \
+        return retValue;                            \
     }
+
+
+size_t HashFAQ6(void *data, size_t size);
 
 #endif 
